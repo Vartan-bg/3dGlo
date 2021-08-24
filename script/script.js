@@ -194,6 +194,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 dot.classList.add('dot');
                 slider.childNodes[17].appendChild(dot);
             });
+            //добавление класса "активный" первой точке
             slider.childNodes[17].childNodes[1].classList.add('dot-active');
         };
         addDots(slide);
