@@ -100,36 +100,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 handlerMenu();
             }
         });
-        //////
-        // btnMenu.addEventListener('click', handlerMenu);
-        // closeBtn.addEventListener('click', handlerMenu);
-        // menuItems.forEach((elem) => {
-        //     elem.addEventListener('click', handlerMenu);
-        // });
-
-        //Плавная прокрутка по кнопкам в меню
-        // for(let i = 0; i < links.length; i++){
-        //     if (links[i].hash && links[i].hash !== '') {
-        //         links[i].addEventListener('click', () => {
-        //             let hash = links[i].hash;
-        //             $('html, body').animate({
-        //                 scrollTop: $(hash).offset().top
-        //             }, 800, function () {
-        //                 window.location.hash = hash;
-        //             });
-        //         });
-        //     }
-        // }
-        //Плавная прокрутка по кнопке в начале страницы
-        // const lastScroll = document.getElementsByTagName('a')[0];
-        // lastScroll.addEventListener('click', () => {
-        //             let hash = lastScroll.hash;
-        //             $('html, body').animate({
-        //                 scrollTop: $(hash).offset().top
-        //             }, 800, function () {
-        //                 window.location.hash = hash;
-        //             });
-        //         });
 
     };
         toggleMenu();
