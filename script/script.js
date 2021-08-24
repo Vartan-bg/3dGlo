@@ -58,47 +58,78 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // кнопка меню
     const toggleMenu = () => {
-        let _this = this;
         const btnMenu = document.querySelector('.menu'),
             menu = document.querySelector('menu'),
             closeBtn = document.querySelector('.close-btn'),
-            menuItems = menu.querySelectorAll('ul>li');
-        const links = menu.querySelectorAll('ul>li>a');
+            menuItems = menu.querySelectorAll('ul>li'),
+            links = menu.querySelectorAll('ul>li>a'),
+            body = document.getElementsByTagName('body')[0];
             
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
         };
-
-
-        btnMenu.addEventListener('click', handlerMenu);
-        closeBtn.addEventListener('click', handlerMenu);
-        menuItems.forEach((elem) => {
-            elem.addEventListener('click', handlerMenu);
-        });
-
-        //Плавная прокрутка по кнопкам в меню
-        for(let i = 0; i < links.length; i++){
-            if (links[i].hash && links[i].hash !== '') {
-                links[i].addEventListener('click', () => {
-                    let hash = links[i].hash;
-                    $('html, body').animate({
-                        scrollTop: $(hash).offset().top
-                    }, 800, function () {
+       
+        // навешивание слушателя на весь body (не main, т.к. всплывающее меню находится вне main)
+        body.addEventListener('click', (event) => {
+            let target = event.target;
+            //если таргет это кнопка "меню" или кнопка закрытия меню:
+            if (target.classList.contains('menu') || (target.classList.contains('close-btn')) || target.closest('.menu')) {
+                handlerMenu();
+            }
+            // если таргет - позиции в меню
+            else if (target.closest('li')) {
+                handlerMenu();
+                //плавная прокрутка
+                if (target.hash && target.hash !== '') {
+                    let hash = target.hash;
+                    $('html, body').animate({ scrollTop: $(hash).offset().top }, 800, () => {
                         window.location.hash = hash;
                     });
+                }
+            }
+            //если таргет - кнопка в конце тега main
+            else if (target.tagName === 'IMG' && target.closest('a')) {
+                //плавная прокрутка
+                let hash = target.parentNode.hash;
+                $('html, body').animate({ scrollTop: $(hash).offset().top }, 800, function () {
+                    window.location.hash = hash;
                 });
             }
-        }
+                //если кликнуть на экран при открытом меню - закрытие меню
+            else if (!target.classList.contains('active-menu') && menu.classList.contains('active-menu')) {
+                handlerMenu();
+            }
+        });
+        //////
+        // btnMenu.addEventListener('click', handlerMenu);
+        // closeBtn.addEventListener('click', handlerMenu);
+        // menuItems.forEach((elem) => {
+        //     elem.addEventListener('click', handlerMenu);
+        // });
+
+        //Плавная прокрутка по кнопкам в меню
+        // for(let i = 0; i < links.length; i++){
+        //     if (links[i].hash && links[i].hash !== '') {
+        //         links[i].addEventListener('click', () => {
+        //             let hash = links[i].hash;
+        //             $('html, body').animate({
+        //                 scrollTop: $(hash).offset().top
+        //             }, 800, function () {
+        //                 window.location.hash = hash;
+        //             });
+        //         });
+        //     }
+        // }
         //Плавная прокрутка по кнопке в начале страницы
-        const lastScroll = document.getElementsByTagName('a')[0];
-        lastScroll.addEventListener('click', () => {
-                    let hash = lastScroll.hash;
-                    $('html, body').animate({
-                        scrollTop: $(hash).offset().top
-                    }, 800, function () {
-                        window.location.hash = hash;
-                    });
-                });
+        // const lastScroll = document.getElementsByTagName('a')[0];
+        // lastScroll.addEventListener('click', () => {
+        //             let hash = lastScroll.hash;
+        //             $('html, body').animate({
+        //                 scrollTop: $(hash).offset().top
+        //             }, 800, function () {
+        //                 window.location.hash = hash;
+        //             });
+        //         });
 
     };
         toggleMenu();
@@ -131,8 +162,57 @@ window.addEventListener('DOMContentLoaded', function () {
             popupClose.addEventListener('click', () => {
                 popup.style.display = 'none';
             });
+
+            popup.addEventListener('click', (event) => {
+                let target = event.target;
+
+                if (target.classList.contains('popup-close')) {
+
+                    popup.style.display = 'none';
+
+                } else {
+
+                    target = target.closest('.popup-content');
+                    if (!target) {
+                        popup.style.display = 'none';
+                    }
+
+                }
+            });
         };
         togglePopup();
 
+    // табы
+    const tabs = () => {
+        const tabHeader = document.querySelector('.service-header'),
+            tab = tabHeader.querySelectorAll('.service-header-tab'),
+            tabContent = document.querySelectorAll('.service-tab');
+        
+        const toggleTabContent = (index) => {
+            for (let i = 0; i < tabContent.length; i++){
+                if (index === i) {
+                    tab[i].classList.add('active');
+                    tabContent[i].classList.remove('d-none');
+                } else {
+                    tabContent[i].classList.add('d-none');
+                     tab[i].classList.remove('active');
+                }
+            }
+        };
+        
+        tabHeader.addEventListener('click', (event) => {
+            let target = event.target;
+            target = target.closest('.service-header-tab');
+                if (target.classList.contains('service-header-tab')) {
+
+                    tab.forEach((item, i) => {
+                        if (item === target) {
+                            toggleTabContent(i);
+                        }
+                    });
+                } 
+        });
+    };
+    tabs();
 
     });
