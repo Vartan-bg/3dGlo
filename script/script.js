@@ -361,10 +361,8 @@ window.addEventListener('DOMContentLoaded', function () {
                         elem.value = elem.value.replace(/ {2,}/g, ' ');
                         elem.value = elem.value.replace(/-{2,}/g, '-');
                         elem.value = elem.value.replace(/(-$|^-)/g, '-');
-                        elem.value = elem.value.replace(/([а-я-]+) ([А-я-]+)/ig, (val1) => 
-                            val1[0].toUpperCase() + val1.slice(1).toLowerCase());
-                        elem.value = elem.value.replace(/(^(?:^|^\s))./gi, (match) => match.toLowerCase());
-                        elem.value = elem.value.replace(/((?:^|\s))./gi, (match) => match.toUpperCase());
+                        elem.value = elem.value.replace(/[а-я]/gi, (match) => match.toLowerCase());
+                        elem.value = elem.value.replace(/((?:^|\s))./g, (match) => ` ${match.toUpperCase()}`).trim();
                 }
                 //инпут "ваше сообщение - только кирилица и запятые"
                 if (elem.getAttribute('name') === 'user_message') {
@@ -386,6 +384,9 @@ window.addEventListener('DOMContentLoaded', function () {
                         elem.value = elem.value.replace(/-{2,}/g, '-');
                         elem.value = elem.value.replace(/^(- )$/g, '').trim();
                 }
+                if (elem.classList.contains('calc-item')) {
+                    elem.value = elem.value.replace(/[^0-9]/g, '');
+                }
                 
             });
         });
@@ -395,12 +396,18 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // наша команда (смена фотографий по наведению мыши)
     const ourTeam = () => {
+        
         const container = document.querySelectorAll('.row')[8];
+        //let photos = container.getElementsByTagName('img');
         container.addEventListener('mouseover', (event) => {
             let target = event.target;
+            let oldPhoto = target.src;
             if (target.classList.contains('command__photo')) {
                 target.src = target.dataset.img;
             }
+            target.addEventListener('mouseout', () => {
+                target.src = oldPhoto;
+            });
         });
     };
     ourTeam();
