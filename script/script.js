@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', function () {
         let idInterval = setInterval(updateClock, 1000);
         
     }
-    countTimer('21 august 2021');
+    countTimer('01 september 2021');
 
     // кнопка меню
     const toggleMenu = () => {
@@ -348,46 +348,45 @@ window.addEventListener('DOMContentLoaded', function () {
     calc(100);
 
     //отслеживание ввода в инпуты
-    // const inputsСhange = () => {
-    //     const allInputs = [...document.getElementsByTagName('input')];
-    //     allInputs.forEach((elem) => {
-    //         elem.addEventListener('blur', () => { 
-    //         //инпут "Ваше имя" - только кирилица и запятые, первая буква каждого слова - заглавная, удалены все лишние пробелы и точки
-    //             if (elem.getAttribute('name') === 'user_name') {
-    //                     elem.value = elem.value.replace(/ {2,}/g, ' ');
-    //                     elem.value = elem.value.replace(/(-{2,}|-$|^-)/g, '-');
-    //                     elem.value = elem.value.replace(/([^а-я])/g, '');
-    //                     elem.value = elem.value.replace(/[а-я]/gi, (match) => match.toLowerCase());
-    //                     elem.value = elem.value.replace(/((?:^|\s))./g, (match) => ` ${match.toUpperCase()}`).trim();
-    //             }
-    //             //инпут "ваше сообщение - только кирилица и запятые"
-    //             if (elem.getAttribute('name') === 'user_message') {
-    //                     elem.value = elem.value.replace(/([^а-я- ]|-$|^-)/gi, '');
-    //                     elem.value = elem.value.replace(/-{2,}/g, '-');
-    //                     elem.value = elem.value.replace(/\s{2,}/g, ' ').trim();
-    //             }
+    const inputsСhange = () => {
+        const allInputs = [...document.getElementsByTagName('input')];
+        allInputs.forEach((elem) => {
+            elem.addEventListener('input', () => { 
+            //инпут "Ваше имя" - только кирилица и запятые, первая буква каждого слова - заглавная, удалены все лишние пробелы и точки
+                if (elem.getAttribute('name') === 'user_name') {
+                        elem.value = elem.value.replace(/([^а-я ]|^ )/gi, '');
+                        elem.value = elem.value.replace(/[а-я]+/gi, (match) => match.toLowerCase());
+                    elem.value = elem.value.replace(/((?:^|\s))./g, (match) => `${match.toUpperCase()}`);
+                    elem.value = elem.value.replace(/ {2,}/g, ' ');
+                }
+                //инпут "ваше сообщение - только кирилица и запятые"
+                if (elem.getAttribute('name') === 'user_message') {
+                        elem.value = elem.value.replace(/([^а-я\,\.\!\?-]|^ )/gi, '');
+                        elem.value = elem.value.replace(/-{2,}/g, '-');
+                        elem.value = elem.value.replace(/\s{2,}/g, ' ');
+                }
 
-    //             //интупы "email" - только латиница и спецсимволы
-    //             if (elem.getAttribute('name') === 'user_email') {
-    //                     elem.value = elem.value.replace(/([^a-z@-_!~*'\.]|-$|^-)/gi, '');
-    //                     elem.value = elem.value.replace(/\s{2,}/, ' ');
-    //                     elem.value = elem.value.replace(/-{2,}/g, '-').trim();
-    //             }
-    //             //инпуты "номер телефона"
-    //             if (elem.getAttribute('name') === 'user_phone') {
-    //                     elem.value = elem.value.replace(/([^\d()-]|-$|^-)/gi, '');
-    //                     elem.value = elem.value.replace(/\s{2,}/, '');
-    //                     elem.value = elem.value.replace(/-{2,}/g, '-');
-    //                     elem.value = elem.value.replace(/^(- )$/g, '').trim();
-    //             }
-    //             if (elem.classList.contains('calc-item')) {
-    //                 elem.value = elem.value.replace(/[^0-9]/g, '');
-    //             }
+                //интупы "email" - только латиница и спецсимволы
+                if (elem.getAttribute('name') === 'user_email') {
+                        elem.value = elem.value.replace(/([^a-z@-_!~*'\.]|-$|^-)/gi, '');
+                        elem.value = elem.value.replace(/\s{2,}/, ' ');
+                        elem.value = elem.value.replace(/-{2,}/g, '-').trim();
+                }
+                //инпуты "номер телефона"
+                if (elem.getAttribute('name') === 'user_phone') {
+                        elem.value = elem.value.replace(/[^\d\+]/gi, '');
+                        // elem.value = elem.value.replace(/\s{2,}/, '');
+                        // elem.value = elem.value.replace(/-{2,}/g, '-');
+                        // elem.value = elem.value.replace(/^(- )$/g, '').trim();
+                }
+                if (elem.classList.contains('calc-item')) {
+                    elem.value = elem.value.replace(/[^0-9]/g, '');
+                }
                 
-    //         });
-    //     });
-    // };
-    // inputsСhange();
+            });
+        });
+    };
+    inputsСhange();
 
 
     // наша команда (смена фотографий по наведению мыши)
@@ -407,5 +406,97 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     };
     ourTeam();
+
+
+    //send-ajax-form
+    const sendForm = () => {
+        const body = document.getElementsByTagName('body')[0];
+        const errorMessage = 'Что-то пошло не так';
+
+        //добавление стиля для анимации загрузки
+        document.head.insertAdjacentHTML("beforeend", `<style>.sk-spinner-pulse {width: 100px; height: 100px; margin: auto;background-color: black ;border-radius: 100%;animation: sk-spinner-pulse 1.0s infinite ease-in-out;}
+
+        @keyframes sk-spinner-pulse {0% {transform: scale(0);} 100% {transform: scale(1.0); opacity: 0;}}</style>`);
+        
+        //создание дива с анимацией загрузки
+        const loadMessage = `<div><div class="sk-spinner sk-spinner-pulse"></div></div>`;
+            const succsessMessage = 'Спасибо! Мы скоро с вами свяжемся';
+        
+        const statusMessage = document.createElement('div');
+        if (!statusMessage.style.cssText) {
+            statusMessage.style.cssText = 'font-size: 2rem;';
+        }
+
+        body.addEventListener('submit', (event) => {
+            event.preventDefault();
+            let target = event.target;
+            //если таргет - форма
+            if (target.getAttribute('name') === 'user_form') {
+                //если таргет - форма из всплывающего окна - текст сообщения белый
+                if (target.getAttribute('id') === 'form3') {
+                    statusMessage.style.cssText = 'font-size: 2rem; color: white;';
+                }
+                target.appendChild(statusMessage);
+                //анимация загрузки
+                statusMessage.innerHTML = loadMessage;
+
+                const formData = new FormData(target);
+
+                let body = {};
+
+                for (let val of formData.entries()) {
+                    body[val[0]] = val[1];
+                }
+                postData(body,
+                    () => {
+                
+                        statusMessage.textContent = succsessMessage;
+                        //обнуление инпутов 1 и 2 формы после отправки
+                        if (target.getAttribute('id') !== 'form3'){
+                            [...target.childNodes[1].childNodes[1].children].forEach((elem) => {
+                                if (elem.children[0].tagName === 'INPUT') {
+                                    elem.children[0].value = '';
+                                }
+                            });
+                            //обнуление инпутов 3 формы (из всплывающего окна)
+                        } else {
+                            [...target.children].forEach((elem) => {
+                                if (elem.children[0] && elem.children[0].tagName === 'INPUT') {
+                                    elem.children[0].value = '';
+                                }
+                            });
+                    }
+                    },
+                    (error) => {
+                        statusMessage.textContent = errorMessage;
+                        console.error(error);
+                    }
+                );
+            }
+        });
+        const postData = (body, outputData, errorData) => {
+            const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+                
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                outputData();
+                } else {
+                errorData(request.status);
+                
+                }
+            });
+
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            
+            request.send(JSON.stringify(body));  
+        };
+
+            
+    };
+    sendForm();
 
     });
