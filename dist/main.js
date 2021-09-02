@@ -1,0 +1,1 @@
+(() => { "use strict"; countTimer("01 september 2021"), toggleMenu(), togglePopup(), tabs(), slider(), calc(100), inputsСhange(), ourTeam(), sendForm(); })();
