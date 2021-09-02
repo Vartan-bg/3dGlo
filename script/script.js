@@ -432,29 +432,39 @@ window.addEventListener('DOMContentLoaded', function () {
             let target = event.target;
             //если таргет - форма
             if (target.getAttribute('name') === 'user_form') {
-                //если таргет - форма из всплывающего окна - текст сообщения белый
-                if (target.getAttribute('id') === 'form3') {
-                    statusMessage.style.cssText = 'font-size: 2rem; color: white;';
-                }
-                target.appendChild(statusMessage);
+
+                statusMessage.style.cssText = 'font-size: 2rem; color: white;';
                 //анимация загрузки
                 statusMessage.innerHTML = loadMessage;
+                target.appendChild(statusMessage);
 
                 const formData = new FormData(target);
-
+                //создание пустого body, в который потом поместим данные из формы
                 let body = {};
 
                 for (let val of formData.entries()) {
                     body[val[0]] = val[1];
                 }
-                //Добавление текста успешной операции (мы с вамя свяжемся)
-                const outputData = (response) => {
-                    if (response.status !== 200) {
-                        throw new Error('status network not 200');
-                    }
-                    statusMessage.textContent = succsessMessage;
-                        //обнуление инпутов 1 и 2 формы после отправки
-                        if (target.getAttribute('id') !== 'form3'){
+                
+                //вызов функции отправки body 
+                (async () => {
+                    //сначала выполняется await, потом обнуляются инпуты
+                    await postData(body)
+                        //Добавление текста успешной операции (мы с вами свяжемся)
+                        .then((response) => {
+                            if (response.status !== 200) {
+                                throw new Error('status network not 200');
+                            }
+                            statusMessage.textContent = succsessMessage;
+                        })
+                        //добавление текста при ошибке
+                        .catch((error) => {
+                            statusMessage.textContent = errorMessage;
+                            console.error(error);
+                    });
+
+                    //обнуление инпутов 1 и 2 формы ПОСЛЕ отправки
+                    if (target.getAttribute('id') !== 'form3'){
                             [...target.childNodes[1].childNodes[1].children].forEach((elem) => {
                                 if (elem.children[0].tagName === 'INPUT') {
                                     elem.children[0].value = '';
@@ -467,14 +477,9 @@ window.addEventListener('DOMContentLoaded', function () {
                                     elem.children[0].value = '';
                                 }
                             });
-                    }
-                };
-                //добавление текста при ошибке
-                const errorData = (error) => {
-                    statusMessage.textContent = errorMessage;
-                    console.error(error);
-                };
-                postData(body).then(outputData).catch(errorData);
+                        }
+                })();
+                
             }
         });
         const postData = (body) => {
@@ -485,10 +490,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify(body)
             });
-            
-        };
-
-            
+        };       
     };
     sendForm();
 
