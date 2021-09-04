@@ -16,7 +16,7 @@
                 handlerMenu();
             }
             // если таргет - позиции в меню
-            else if ((target.closest('li')) && target.parentNode.parentNode.parentNode.tagName === 'MENU') {
+            else if ((target.closest('a')) && target.parentNode.parentNode.parentNode.tagName === 'MENU') {
                 handlerMenu();
                 //плавная прокрутка
                 if (target.hash && target.hash !== '') {
@@ -35,7 +35,7 @@
                 });
             }
             //если кликнуть на экран при открытом меню - закрытие меню
-            else if (!target.classList.contains('active-menu') && menu.classList.contains('active-menu')) {
+            else if ((!target.classList.contains('active-menu')&&(target.tagName!=="LI")) && menu.classList.contains('active-menu')) {
                 handlerMenu();
             }
             

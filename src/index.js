@@ -8,12 +8,12 @@ import inputsСhange from './modules/inputsСhange';
 import ourTeam from './modules/ourTeam';
 import sendForm from './modules/sendForm';
 // Таймер
-countTimer('01 september 2021');
+countTimer('09 september 2021');
 // кнопка меню
 toggleMenu();
 //popup
 togglePopup();
-// табы
+// табыzzzz
 tabs();
 //слайдер
 slider();

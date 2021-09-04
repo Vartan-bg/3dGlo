@@ -11,22 +11,13 @@ module.exports = {
         open: true,
         port: 8080,
         hot: true,
-        static: {
-            directory: __dirname,
-            watch: true,
-        },
+        writeToDisk: true,
     },
     module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/env']
-                    },
-                },
-            }
-        ]
+        rules: [{
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: '/node_modules/'
+        }]
     }
 };

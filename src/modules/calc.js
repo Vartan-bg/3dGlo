@@ -31,15 +31,18 @@
 
             const calcAnimation = () => {
 				requestAnimationFrame(calcAnimation);
-				if (counter < total) {
-					if (typeValue && squareValue ) {
-						counter += 100;
-						if (counter > total) {
-								totalValue.textContent = Math.floor(counter - (counter - total));
-						} else {
-							totalValue.textContent = counter;
-						}
+                if (typeValue && squareValue && (counter < total)) {
+                    if (total < 3000) {
+                        counter += 100;
+                    } else if (total > 3000) {
+                        counter += 1000;
+                    }
+					if (counter > total) {
+						totalValue.textContent = Math.floor(counter - (counter - total));
+					} else {
+						totalValue.textContent = counter;
 					}
+					
 				}
 			};
 			calcAnimation();
