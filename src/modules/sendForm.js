@@ -72,7 +72,7 @@
             }
         });
         const postData = (body) => {
-            return fetch('http://3dglo/server.php', {
+            return fetch('./server.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
