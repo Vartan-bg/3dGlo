@@ -37,23 +37,47 @@
                 
                 //вызов функции отправки body 
                 (async () => {
-                    //сначала выполняется await, потом обнуляются инпуты
-                    await postData(body)
-                        //Добавление текста успешной операции (мы с вами свяжемся)
-                        .then((response) => {
-                            if (response.status !== 200) {
-                                throw new Error('status network not 200');
+                    let error = 0;
+                    if (target.getAttribute('id') !== 'form3') {
+                        [...target.childNodes[1].childNodes[1].children].forEach((elem => {
+                            if ((elem.children[0].tagName === 'INPUT') && ((elem.children[0].value === '') || (elem.children[0].value.length < 2))) {
+                                elem.children[0].style.cssText += 'border: 3px solid red';
+                                statusMessage.innerHTML = '';
+                                error++;
+                            }  else {
+                                elem.children[0].style.cssText += 'border: none';
                             }
-                            statusMessage.textContent = succsessMessage;
-                        })
-                        //добавление текста при ошибке
-                        .catch((error) => {
-                            statusMessage.textContent = errorMessage;
-                            console.error(error);
-                    });
+                        
+                        }));
+                    } else if (target.getAttribute('id') === 'form3') {
+                        [...target.children].forEach((elem) => {
+                            if (elem.children[0] && elem.children[0].tagName === 'INPUT' && (elem.children[0].value === '' || elem.children[0].value.length < 2)) {
+                                elem.children[0].style.cssText += 'border: 3px solid red';
+                                statusMessage.innerHTML = '';
+                                error++;
+                            } else {
+                                elem.children[0].style.cssText += 'border: none';
+                            }
+                        });
+                    }
+                    //сначала выполняется await, потом обнуляются инпуты
+                    if (error === 0) {
+                        await postData(body)
+                            //Добавление текста успешной операции (мы с вами свяжемся)
+                            .then((response) => {
+                                if (response.status !== 200) {
+                                    throw new Error('status network not 200');
+                                }
+                                statusMessage.textContent = succsessMessage;
+                            })
+                            //добавление текста при ошибке
+                            .catch((error) => {
+                                statusMessage.textContent = errorMessage;
+                                console.error(error);
+                            });
 
-                    //обнуление инпутов 1 и 2 формы ПОСЛЕ отправки
-                    if (target.getAttribute('id') !== 'form3'){
+                        //обнуление инпутов 1 и 2 формы ПОСЛЕ отправки
+                        if (target.getAttribute('id') !== 'form3') {
                             [...target.childNodes[1].childNodes[1].children].forEach((elem) => {
                                 if (elem.children[0].tagName === 'INPUT') {
                                     elem.children[0].value = '';
@@ -67,6 +91,7 @@
                                 }
                             });
                         }
+                    }
                 })();
                 
             }
