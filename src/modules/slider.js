@@ -109,3 +109,10 @@
 };
     
 export default slider;
+
+
+class sliderCarusel {
+    constructor() {
+        
+    }
+}

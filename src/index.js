@@ -13,7 +13,7 @@ countTimer('09 september 2021');
 toggleMenu();
 //popup
 togglePopup();
-// табыzzzz
+// табы
 tabs();
 //слайдер
 slider();
