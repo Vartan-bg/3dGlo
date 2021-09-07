@@ -29,20 +29,14 @@ const countTimer = (deadline) => {
         timerMinutes.textContent = timer.minutes;
         timerSeconds.textContent = timer.seconds;
 
-
-
-        if (timer.timeRemaining > 0) {
-            setTimeout(updateClock, 1000);
-                
-        }
-        else {
+        if (timer.timeRemaining < 0) {
             const clockDiv = document.querySelector('#timer');
 
             clockDiv.style.color = '#f00';
             timerHours.textContent = '00';
             timerMinutes.textContent = '00';
             timerSeconds.textContent = '00';
-            clearInterval(idInterval);
+            clearInterval(idInterval);  
         }
     };
     let idInterval = setInterval(updateClock, 1000);
